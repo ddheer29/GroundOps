@@ -1,19 +1,19 @@
 import React from 'react';
-import { Box, AppBar, Toolbar, Typography, Drawer, List, ListItem, ListItemIcon, ListItemText, ListItemButton, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
+import { Box, AppBar, Toolbar, Typography, Drawer, List, ListItem, ListItemIcon, ListItemText, ListItemButton, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, IconButton } from '@mui/material';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleIcon from '@mui/icons-material/People';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import LogoutIcon from '@mui/icons-material/Logout';
+import MenuIcon from '@mui/icons-material/Menu';
 import { useAuth } from '../context/AuthContext';
-
-const drawerWidth = 240;
 
 const DashboardLayout: React.FC = () => {
   const { logout, user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [open, setOpen] = React.useState(false);
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
 
   const menuItems = [
     { text: 'Dashboard', icon: <DashboardIcon />, path: '/' },
@@ -29,10 +29,42 @@ const DashboardLayout: React.FC = () => {
     setOpen(false);
   };
 
+  const toggleDrawer = (newOpen: boolean) => () => {
+    setDrawerOpen(newOpen);
+  };
+
+  const DrawerList = (
+    <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
+      <List>
+        {menuItems.map((item) => (
+          <ListItem key={item.text} disablePadding>
+            <ListItemButton 
+              selected={location.pathname === item.path}
+              onClick={() => navigate(item.path)}
+            >
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
+
   return (
     <Box sx={{ display: 'flex' }}>
-      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+      <AppBar position="fixed">
         <Toolbar>
+        <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 2 }}
+            onClick={toggleDrawer(true)}
+          >
+            <MenuIcon />
+          </IconButton>
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             GroundOps - {user?.role}
           </Typography>
@@ -42,29 +74,10 @@ const DashboardLayout: React.FC = () => {
         </Toolbar>
       </AppBar>
       <Drawer
-        variant="permanent"
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
-        }}
+        open={drawerOpen}
+        onClose={toggleDrawer(false)}
       >
-        <Toolbar />
-        <Box sx={{ overflow: 'auto' }}>
-          <List>
-            {menuItems.map((item) => (
-              <ListItem key={item.text} disablePadding>
-                <ListItemButton 
-                  selected={location.pathname === item.path}
-                  onClick={() => navigate(item.path)}
-                >
-                  <ListItemIcon>{item.icon}</ListItemIcon>
-                  <ListItemText primary={item.text} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-        </Box>
+        {DrawerList}
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
