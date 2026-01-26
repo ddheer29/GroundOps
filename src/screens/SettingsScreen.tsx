@@ -1,10 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, Button, Alert } from 'react-native';
+import { View, Text, StyleSheet, Button, Alert, TouchableOpacity } from 'react-native';
 import { useRealm, useQuery } from '../database/realm';
 import { User, SyncQueue } from '../database/schemas';
 import { AuthService } from '../services/AuthService';
 import { SyncService } from '../services/SyncService';
 import { COLORS, SPACING } from '../theme/theme';
+import { navigate } from '../utils/NavigationUtil';
 
 export const SettingsScreen = () => {
   const realm = useRealm();
@@ -14,7 +15,19 @@ export const SettingsScreen = () => {
   const pendingSyncs = useQuery(SyncQueue).length;
 
   const handleLogout = async () => {
-      await authService.logout();
+    Alert.alert('Logout', 'Are you sure you want to logout?', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {
+        text: 'Logout',
+        onPress: async () => {
+          await authService.logout();
+        },
+      },
+    ]);
   };
 
   const handleForceSync = async () => {
@@ -25,11 +38,10 @@ export const SettingsScreen = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.section}>
+      <TouchableOpacity style={styles.section} onPress={() => navigate('Profile')}>
           <Text style={styles.header}>Account</Text>
           <Text style={styles.info}>Logged in as: {user?.username}</Text>
-          <Button title="Logout" onPress={handleLogout} color={COLORS.danger} />
-      </View>
+      </TouchableOpacity>
 
       <View style={styles.section}>
           <Text style={styles.header}>Sync</Text>
@@ -41,6 +53,7 @@ export const SettingsScreen = () => {
           <Text style={styles.header}>App Info</Text>
           <Text style={styles.info}>Version: 0.0.1</Text>
       </View>
+      <Button title="Logout" onPress={handleLogout} color={COLORS.danger} />
     </View>
   );
 };

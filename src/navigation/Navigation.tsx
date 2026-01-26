@@ -10,6 +10,7 @@ import { TaskDetailScreen } from '../screens/TaskDetailScreen';
 import { SettingsScreen } from '../screens/SettingsScreen';
 import { CameraScreen } from '../screens/CameraScreen';
 import { COLORS } from '../theme/theme';
+import { ProfileScreen } from '../screens/ProfileScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -20,6 +21,7 @@ function AppStack() {
             <Stack.Screen name="Main" component={TabNavigator} options={{ headerShown: false }} />
             <Stack.Screen name="TaskDetail" component={TaskDetailScreen} options={{ title: 'Task Details' }} />
             <Stack.Screen name="Camera" component={CameraScreen} />
+            <Stack.Screen name="Profile" component={ProfileScreen} />
         </Stack.Navigator>
     );
 }

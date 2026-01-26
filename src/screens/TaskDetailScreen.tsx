@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput } from 'react-native';
 import { useObject, useRealm } from '../database/realm';
-import { Task, SyncQueue } from '../database/schemas';
-import { COLORS, SPACING, FONT_SIZE } from '../theme/theme';
-import { useRoute, useNavigation } from '@react-navigation/native';
+import { Task } from '../database/schemas';
+import { COLORS, SPACING } from '../theme/theme';
+import { useRoute } from '@react-navigation/native';
+import { navigate } from '../utils/NavigationUtil';
 
 export const TaskDetailScreen = () => {
   const route = useRoute<any>();
   const { taskId } = route.params;
   const task = useObject(Task, taskId);
   const realm = useRealm();
-  const navigation = useNavigation<any>();
   
   const [noteText, setNoteText] = useState(task?.notes || '');
 
@@ -112,7 +112,7 @@ export const TaskDetailScreen = () => {
                       <Text style={styles.attachmentText}>IMG {index + 1}</Text>
                   </View>
               ))}
-              <TouchableOpacity style={styles.addPhotoBtn} onPress={() => navigation.navigate('Camera', { taskId: task._id })}>
+              <TouchableOpacity style={styles.addPhotoBtn} onPress={() => navigate('Camera', { taskId: task._id })}>
                   <Text style={styles.addPhotoText}>+ Add Photo</Text>
               </TouchableOpacity>
           </View>

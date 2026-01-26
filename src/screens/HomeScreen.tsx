@@ -4,13 +4,12 @@ import { useRealm, useQuery } from '../database/realm';
 import { Task } from '../database/schemas';
 import { COLORS, SPACING, FONT_SIZE } from '../theme/theme';
 import { SyncService } from '../services/SyncService';
-import { useNavigation } from '@react-navigation/native';
 import { useNetInfo } from '@react-native-community/netinfo';
+import { navigate } from '../utils/NavigationUtil';
 
 export const HomeScreen = () => {
   const realm = useRealm();
   const tasks = useQuery(Task).sorted('updatedAt', true);
-  const navigation = useNavigation<any>();
   const syncService = new SyncService(realm);
   const netInfo = useNetInfo();
   
@@ -34,7 +33,7 @@ export const HomeScreen = () => {
   const renderItem = ({ item }: { item: Task }) => (
     <TouchableOpacity 
       style={styles.taskCard} 
-      onPress={() => navigation.navigate('TaskDetail', { taskId: item._id })}
+      onPress={() => navigate('TaskDetail', { taskId: item._id })}
     >
       <View style={styles.cardHeader}>
         <Text style={styles.cardTitle}>{item.title}</Text>
@@ -147,7 +146,7 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
   },
   offlineBanner: {
-      backgroundColor: COLORS.text,
+      backgroundColor: COLORS.warning,
       padding: SPACING.s,
       alignItems: 'center',
   },

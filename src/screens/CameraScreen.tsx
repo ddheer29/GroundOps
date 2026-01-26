@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
-import { useRoute, useNavigation } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import { useRealm, useObject } from '../database/realm';
 import { Task } from '../database/schemas';
 import { COLORS, SPACING } from '../theme/theme';
 import Realm from 'realm';
+import { goBack } from '../utils/NavigationUtil';
 
 export const CameraScreen = () => {
     const route = useRoute<any>();
-    const navigation = useNavigation();
     const { taskId } = route.params || {};
     const [capturing, setCapturing] = useState(false);
     
@@ -19,7 +19,7 @@ export const CameraScreen = () => {
         return (
             <View style={styles.container}>
                 <Text style={styles.errorText}>Task not found</Text>
-                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
+                <TouchableOpacity onPress={() => goBack()} style={styles.backBtn}>
                     <Text style={styles.backBtnText}>Go Back</Text>
                 </TouchableOpacity>
             </View>
@@ -57,14 +57,14 @@ export const CameraScreen = () => {
             });
 
             setCapturing(false);
-            navigation.goBack();
+            goBack();
         }, 1500);
     };
 
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.closeBtn}>
+                <TouchableOpacity onPress={() => goBack()} style={styles.closeBtn}>
                      <Text style={styles.closeText}>✕</Text>
                 </TouchableOpacity>
             </View>

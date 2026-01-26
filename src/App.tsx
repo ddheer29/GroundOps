@@ -3,12 +3,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import { RealmProvider } from './database/realm';
 import { RootNavigator } from './navigation/Navigation';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { navigationRef } from './utils/NavigationUtil';
 
 function App(): React.JSX.Element {
   return (
     <SafeAreaProvider>
         <RealmProvider fallback={<LoadingFallback />}>
-            <NavigationContainer>
+            <NavigationContainer ref={navigationRef}>
                 <RootNavigator />
             </NavigationContainer>
         </RealmProvider>
