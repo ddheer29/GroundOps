@@ -46,7 +46,7 @@ app.get('/api/users', protect, userController.getUsers); // Protected
 
 // Root
 app.get('/', (req, res) => {
-  res.send('FieldSync SaaS Backend is running...');
+  res.send('GroundOps SaaS Backend is running...');
 });
 
 // SaaS Seeder

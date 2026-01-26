@@ -34,7 +34,7 @@ const Signup: React.FC = () => {
         }}
       >
         <Typography component="h1" variant="h4" color="primary" gutterBottom>
-          FieldSync
+          GroundOps
         </Typography>
         <Paper sx={{ p: 4, width: '100%' }}>
           <Typography component="h2" variant="h5" align="center">

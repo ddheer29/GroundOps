@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, Alert, Image, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform } from 'react-native';
 import { useRealm } from '../database/realm';
 import { AuthService } from '../services/AuthService';
 import { COLORS, SPACING, FONT_SIZE } from '../theme/theme';
-import { useNavigation } from '@react-navigation/native';
 import { useNetInfo } from '@react-native-community/netinfo';
 
 export const LoginScreen = () => {
@@ -33,14 +32,19 @@ export const LoginScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>FieldSync</Text>
-      <Text style={styles.subtitle}>Mobile Workforce</Text>
-      
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.rootContainer}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.container}>
+      <View style={styles.logoContainer}>
+        <Image source={require('../assets/icon/appLogo.png')} style={styles.logo} />
+      </View>
+      <Text style={styles.title}>Login</Text>
       <View style={styles.form}>
         <TextInput 
           style={styles.input} 
-          placeholder="Username" 
+          placeholder="Username / Email" 
           value={username} 
           onChangeText={setUsername}
           autoCapitalize="none"
@@ -52,7 +56,7 @@ export const LoginScreen = () => {
           onChangeText={setPassword}
           secureTextEntry
         />
-        
+        <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
         <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
           {loading ? (
              <ActivityIndicator color="#fff" />
@@ -61,51 +65,60 @@ export const LoginScreen = () => {
           )}
         </TouchableOpacity>
       </View>
-    </View>
+      </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
+    
   );
 };
 
 const styles = StyleSheet.create({
+  rootContainer: {
+    flex: 1,
+    backgroundColor: COLORS.card,
+  },
   container: {
     flex: 1,
     padding: SPACING.l,
     justifyContent: 'center',
-    backgroundColor: COLORS.background,
+  },
+  logoContainer: {
+    alignItems: 'center',
+  },
+  logo: {
+    width: 250,
+    height: 250,
   },
   title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: COLORS.primary,
+    fontSize: FONT_SIZE.xl,
+    fontWeight: '600',
     textAlign: 'center',
-    marginBottom: SPACING.xs,
-  },
-  subtitle: {
-    fontSize: FONT_SIZE.m,
-    color: COLORS.textSecondary,
-    textAlign: 'center',
-    marginBottom: SPACING.xl,
+    marginBottom: SPACING.l,
   },
   form: {
-    backgroundColor: COLORS.card,
-    padding: SPACING.m,
-    borderRadius: 12,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    elevation: 5,
+    padding: SPACING.xs,
   },
   input: {
     borderWidth: 1,
     borderColor: COLORS.border,
-    borderRadius: 8,
-    padding: SPACING.m,
+    borderRadius: 12,
+    paddingHorizontal: SPACING.m,
+    paddingVertical: SPACING.ss,
     marginBottom: SPACING.m,
     fontSize: FONT_SIZE.m,
   },
+  forgotPasswordText: {
+    color: COLORS.textSecondary,
+    fontSize: FONT_SIZE.s,
+    textAlign: 'center',
+    marginBottom: SPACING.m,
+    marginTop: SPACING.m,
+  },
   button: {
     backgroundColor: COLORS.primary,
-    padding: SPACING.m,
-    borderRadius: 8,
+    paddingHorizontal: SPACING.m,
+    paddingVertical: SPACING.ss,
+    borderRadius: 12,
     alignItems: 'center',
   },
   buttonText: {

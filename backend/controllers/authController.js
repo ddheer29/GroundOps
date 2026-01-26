@@ -112,7 +112,7 @@ const inviteUser = async (req, res) => {
         // 4. Send Email
         const inviteLink = `http://localhost:5173/set-password?token=${inviteToken}`;
         const message = `
-          You have been invited to join FieldSync as a ${role}.
+          You have been invited to join GroundOps as a ${role}.
           Please click the link below to set your password and login:
           
           ${inviteLink}
@@ -121,7 +121,7 @@ const inviteUser = async (req, res) => {
         try {
             await sendEmail({
                 email: user.username,
-                subject: 'FieldSync Invitation',
+                subject: 'GroundOps Invitation',
                 message,
             });
             res.status(201).json({ message: 'Invitation email sent' });

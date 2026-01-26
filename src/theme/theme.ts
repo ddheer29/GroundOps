@@ -21,6 +21,7 @@ export const COLORS = {
 export const SPACING = {
   xs: 4,
   s: 8,
+  ss: 12,
   m: 16,
   l: 24,
   xl: 32,

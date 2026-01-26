@@ -36,7 +36,7 @@ const SetPassword = () => {
         <Container component="main" maxWidth="xs">
             <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <Typography component="h1" variant="h4" color="primary" gutterBottom>
-                    FieldSync
+                    GroundOps
                 </Typography>
                 <Paper sx={{ p: 4, width: '100%' }}>
                     <Typography component="h2" variant="h5" align="center">

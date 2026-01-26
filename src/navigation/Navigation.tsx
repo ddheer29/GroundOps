@@ -1,6 +1,8 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons';
+
 import { useQuery } from '../database/realm';
 import { User } from '../database/schemas';
 
@@ -29,10 +31,22 @@ function AppStack() {
 function TabNavigator() {
     return (
         <Tab.Navigator
-            screenOptions={{
+            screenOptions= {({route}) => ({
                 tabBarActiveTintColor: COLORS.primary,
                 tabBarInactiveTintColor: COLORS.textSecondary,
-            }}
+                tabBarIcon: ({ focused, color }) => {
+                    let iconName;
+                    if (route.name === 'Home') {
+                        iconName = focused ? 'home-variant' : 'home-variant-outline';
+                    } else if (route.name === 'Settings') {
+                        iconName = focused ? 'cog' : 'cog-outline';
+                    }
+
+                    return (
+                        <MaterialDesignIcons name={iconName} size={24} color={color} />
+                    )
+                }
+            })}
         >
             <Tab.Screen name="Home" component={HomeScreen} />
             <Tab.Screen name="Settings" component={SettingsScreen} />
