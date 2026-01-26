@@ -25,7 +25,7 @@ const DashboardLayout: React.FC = () => {
       <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
         <Toolbar>
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-            FieldSync Operations - {user?.role}
+            GroundOps - {user?.role}
           </Typography>
           <Button color="inherit" startIcon={<LogoutIcon />} onClick={logout}>
             Logout

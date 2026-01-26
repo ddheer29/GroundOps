@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Typography, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Chip, Dialog, DialogTitle, DialogContent, TextField, DialogActions, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { Box, Typography, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Chip, Dialog, DialogTitle, DialogContent, TextField, DialogActions, FormControl, InputLabel, Select, MenuItem, Snackbar, Alert } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import client from '../api/client';
 
@@ -7,6 +7,11 @@ const Tasks = () => {
     const [tasks, setTasks] = useState([]);
     const [open, setOpen] = useState(false);
     const [newTask, setNewTask] = useState({ title: '', location: '', description: '', priority: 'Normal' });
+    const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: 'success' | 'error' | 'info' | 'warning' }>({
+        open: false,
+        message: '',
+        severity: 'success',
+    });
 
     useEffect(() => {
         fetchTasks();
@@ -19,6 +24,10 @@ const Tasks = () => {
         } catch (e) {
             console.error(e);
         }
+    };
+
+    const handleCloseSnackbar = () => {
+        setSnackbar({ ...snackbar, open: false });
     };
 
     const handleCreate = async () => {
@@ -38,9 +47,10 @@ const Tasks = () => {
             setOpen(false);
             setNewTask({ title: '', location: '', description: '', priority: 'Normal' });
             fetchTasks();
+            setSnackbar({ open: true, message: 'Task created successfully.', severity: 'success' });
         } catch (e) {
             console.error(e);
-            alert('Failed to create task');
+            setSnackbar({ open: true, message: 'This is an error Alert.', severity: 'error' });
         }
     };
 
@@ -120,6 +130,12 @@ const Tasks = () => {
                     <Button onClick={handleCreate} variant="contained">Create</Button>
                 </DialogActions>
             </Dialog>
+
+            <Snackbar open={snackbar.open} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+                <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
+                    {snackbar.message}
+                </Alert>
+            </Snackbar>
         </Box>
     );
 };

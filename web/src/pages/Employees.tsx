@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Chip, Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Chip, Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions, FormControl, InputLabel, Select, MenuItem, Snackbar, Alert } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import client from '../api/client';
 
@@ -7,6 +7,11 @@ const Employees = () => {
     const [users, setUsers] = useState([]);
     const [open, setOpen] = useState(false);
     const [inviteData, setInviteData] = useState({ email: '', name: '', role: 'FieldAgent' });
+    const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: 'success' | 'error' | 'info' | 'warning' }>({
+        open: false,
+        message: '',
+        severity: 'success',
+    });
 
     useEffect(() => {
         fetchUsers();
@@ -21,16 +26,20 @@ const Employees = () => {
         }
     };
 
+    const handleCloseSnackbar = () => {
+        setSnackbar({ ...snackbar, open: false });
+    };
+
     const handleInvite = async () => {
         try {
             await client.post('/auth/invite', inviteData);
-            alert('Invitation sent! Check backend console for link.');
             setOpen(false);
             setInviteData({ email: '', name: '', role: 'FieldAgent' });
             fetchUsers();
+            setSnackbar({ open: true, message: 'Invitation sent!', severity: 'success' });
         } catch (e: any) {
             console.error(e);
-            alert('Failed to invite: ' + (e.response?.data?.message || e.message || 'Unknown error'));
+            setSnackbar({ open: true, message: 'Failed to invite: ' + (e.response?.data?.message || e.message || 'Unknown error'), severity: 'error' });
         }
     };
 
@@ -104,6 +113,11 @@ const Employees = () => {
                     <Button onClick={handleInvite} variant="contained">Send Invite</Button>
                 </DialogActions>
             </Dialog>
+            <Snackbar open={snackbar.open} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+                <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
+                    {snackbar.message}
+                </Alert>
+            </Snackbar>
         </Box>
     );
 };
