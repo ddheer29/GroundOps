@@ -1,13 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Grid, Paper, Typography, Box } from '@mui/material';
+import { Grid, Paper, Typography, Box, CircularProgress } from '@mui/material';
 import client from '../api/client';
 
 const DashboardHome = () => {
     const [stats, setStats] = useState({ tasks: 0, pending: 0, completed: 0 });
-
-    useEffect(() => {
-        fetchStats();
-    }, []);
+    const [loading, setLoading] = useState(true);
 
     const fetchStats = async () => {
         try {
@@ -19,8 +16,22 @@ const DashboardHome = () => {
             setStats({ tasks: total, pending, completed });
         } catch (e) {
             console.error(e);
+        } finally {
+            setLoading(false)
         }
     };
+
+    useEffect(() => {
+        fetchStats();
+    }, []);
+
+    if (loading) {
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
+                <CircularProgress />
+            </Box>
+        )
+    }
 
     return (
         <Box>

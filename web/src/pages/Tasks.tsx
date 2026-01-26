@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Typography, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Chip, Dialog, DialogTitle, DialogContent, TextField, DialogActions, FormControl, InputLabel, Select, MenuItem, Snackbar, Alert } from '@mui/material';
+import { Box, Typography, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Chip, Dialog, DialogTitle, DialogContent, TextField, DialogActions, FormControl, InputLabel, Select, MenuItem, Snackbar, Alert, CircularProgress } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import client from '../api/client';
 
@@ -12,6 +12,7 @@ const Tasks = () => {
         message: '',
         severity: 'success',
     });
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         fetchTasks();
@@ -23,6 +24,8 @@ const Tasks = () => {
             setTasks(data);
         } catch (e) {
             console.error(e);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -53,6 +56,14 @@ const Tasks = () => {
             setSnackbar({ open: true, message: 'This is an error Alert.', severity: 'error' });
         }
     };
+
+    if (loading) {
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
+                <CircularProgress />
+            </Box>
+        )
+    }
 
     return (
         <Box>

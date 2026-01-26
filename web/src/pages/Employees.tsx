@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Chip, Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions, FormControl, InputLabel, Select, MenuItem, Snackbar, Alert } from '@mui/material';
+import { Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Chip, Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions, FormControl, InputLabel, Select, MenuItem, Snackbar, Alert, CircularProgress } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import client from '../api/client';
 
@@ -12,6 +12,7 @@ const Employees = () => {
         message: '',
         severity: 'success',
     });
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         fetchUsers();
@@ -23,6 +24,8 @@ const Employees = () => {
             setUsers(data);
         } catch (e) {
             console.error(e);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -42,6 +45,14 @@ const Employees = () => {
             setSnackbar({ open: true, message: 'Failed to invite: ' + (e.response?.data?.message || e.message || 'Unknown error'), severity: 'error' });
         }
     };
+
+    if (loading) {
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
+                <CircularProgress />
+            </Box>
+        )
+    }
 
     return (
         <Box>
