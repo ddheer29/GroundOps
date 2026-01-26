@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, AppBar, Toolbar, Typography, Drawer, List, ListItem, ListItemIcon, ListItemText, ListItemButton, Button } from '@mui/material';
+import { Box, AppBar, Toolbar, Typography, Drawer, List, ListItem, ListItemIcon, ListItemText, ListItemButton, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleIcon from '@mui/icons-material/People';
@@ -13,12 +13,21 @@ const DashboardLayout: React.FC = () => {
   const { logout, user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [open, setOpen] = React.useState(false);
 
   const menuItems = [
     { text: 'Dashboard', icon: <DashboardIcon />, path: '/' },
     { text: 'Tasks', icon: <AssignmentIcon />, path: '/tasks' },
     { text: 'Employees', icon: <PeopleIcon />, path: '/employees' },
   ];
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -27,7 +36,7 @@ const DashboardLayout: React.FC = () => {
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             GroundOps - {user?.role}
           </Typography>
-          <Button color="inherit" startIcon={<LogoutIcon />} onClick={logout}>
+          <Button color="inherit" startIcon={<LogoutIcon />} onClick={handleClickOpen}>
             Logout
           </Button>
         </Toolbar>
@@ -61,6 +70,28 @@ const DashboardLayout: React.FC = () => {
         <Toolbar />
         <Outlet />
       </Box>
+
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          Logout
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to logout?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={logout} autoFocus>
+            Logout
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
