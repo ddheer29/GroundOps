@@ -112,7 +112,7 @@ export const TaskDetailScreen = () => {
                       <Text style={styles.attachmentText}>IMG {index + 1}</Text>
                   </View>
               ))}
-              <TouchableOpacity style={styles.addPhotoBtn} onPress={() => navigation.navigate('Camera')}>
+              <TouchableOpacity style={styles.addPhotoBtn} onPress={() => navigation.navigate('Camera', { taskId: task._id })}>
                   <Text style={styles.addPhotoText}>+ Add Photo</Text>
               </TouchableOpacity>
           </View>

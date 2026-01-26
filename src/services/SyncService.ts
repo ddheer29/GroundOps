@@ -1,6 +1,6 @@
 import { Realm } from '@realm/react';
-import { SyncQueue, Task } from '../database/schemas';
-import { MockApi } from '../api/mockApi';
+import { SyncQueue, Task, User } from '../database/schemas';
+import { ApiClient } from '../api/client';
 
 export class SyncService {
   private realm: Realm;
@@ -35,9 +35,12 @@ export class SyncService {
   }
 
   private async processQueueItem(item: SyncQueue) {
+    const user = this.realm.objects(User)[0];
+    if (!user || !user.token) return;
+
     if (item.collection === 'Task') {
         const payload = JSON.parse(item.payload);
-        await MockApi.syncTask(payload);
+        await ApiClient.syncTask(payload, user.token);
         
         // Update local task to synced
         if (item.operation === 'UPDATE' || item.operation === 'CREATE') {
@@ -52,8 +55,11 @@ export class SyncService {
   }
 
   async pullLatestData() {
+      const user = this.realm.objects(User)[0];
+      if (!user || !user.token) return;
+
       try {
-          const tasks = await MockApi.fetchTasks();
+          const tasks = await ApiClient.fetchTasks(user.token);
           console.log(`Fetched ${tasks.length} tasks from server.`);
           
           this.realm.write(() => {

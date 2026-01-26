@@ -1,6 +1,6 @@
 import { Realm } from '@realm/react';
 import { User } from '../database/schemas';
-import { MockApi } from '../api/mockApi';
+import { ApiClient } from '../api/client';
 
 export class AuthService {
   private realm: Realm;
@@ -12,7 +12,7 @@ export class AuthService {
   async login(username: string, password: string) {
     try {
       // 1. Online Login
-      const response = await MockApi.login(username, password);
+      const response = await ApiClient.login(username, password);
       
       // 2. Save Session Locally
       this.realm.write(() => {
