@@ -13,6 +13,7 @@ import { SettingsScreen } from '../screens/SettingsScreen';
 import { CameraScreen } from '../screens/CameraScreen';
 import { COLORS } from '../theme/theme';
 import { ProfileScreen } from '../screens/ProfileScreen';
+import { ForgotPassScreen } from '../screens/ForgotPassScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -58,6 +59,7 @@ function AuthStack() {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="ForgotPass" component={ForgotPassScreen} />
         </Stack.Navigator>
     );
 }

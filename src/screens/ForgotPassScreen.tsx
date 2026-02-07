@@ -5,9 +5,8 @@ import { AuthService } from '../services/AuthService';
 import { COLORS, SPACING, FONT_SIZE } from '../theme/theme';
 import { useNetInfo } from '@react-native-community/netinfo';
 import Toast from '../utils/Toast';
-import { navigate } from '../utils/NavigationUtil';
 
-export const LoginScreen = () => {
+export const ForgotPassScreen = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -30,7 +29,6 @@ export const LoginScreen = () => {
     try {
       await authService.login(username, password);
     } catch (error) {
-      console.log("🚀 -> handleLogin -> error:", error)
       Toast.show({
         type: 'error',
         text1: 'Login Failed',
@@ -47,36 +45,7 @@ export const LoginScreen = () => {
       style={styles.rootContainer}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
-        <Text style={styles.title}>Login</Text>
-        <View style={styles.logoContainer}>
-          <Image source={require('../assets/icon/appLogo.png')} style={styles.logo} />
-        </View>
-        <View style={styles.form}>
-          <TextInput 
-            style={styles.input} 
-            placeholder="Username / Email" 
-            placeholderTextColor={COLORS.textSecondary}
-            value={username} 
-            onChangeText={setUsername}
-            autoCapitalize="none"
-          />
-          <TextInput 
-            style={styles.input} 
-            placeholder="Password" 
-            placeholderTextColor={COLORS.textSecondary}
-            value={password} 
-            onChangeText={setPassword}
-            // secureTextEntry
-          />
-          <Text style={styles.forgotPasswordText} onPress={() => navigate('ForgotPass')}>Forgot Password?</Text>
-          <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
-            {loading ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <Text style={styles.buttonText}>Login</Text>
-            )}
-          </TouchableOpacity>
-        </View>
+          <Text style={styles.title}>Forgot Password</Text>
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
@@ -125,7 +94,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: SPACING.m,
     marginTop: SPACING.m,
-    textDecorationLine: 'underline',
   },
   button: {
     backgroundColor: COLORS.primary,

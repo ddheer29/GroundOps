@@ -60,10 +60,10 @@ export class SyncService {
 
       try {
           const tasks = await ApiClient.fetchTasks(user.token);
-          console.log(`Fetched ${tasks.length} tasks from server.`);
+          console.log(`Fetched ${tasks.length} tasks from server.`, tasks);
           
           this.realm.write(() => {
-              for (const remoteTask of tasks) {
+              for (const remoteTask of tasks || []) {
                   // Upsert logic: Update if exists, Insert if not
                   const existingTask = this.realm.objectForPrimaryKey<Task>(Task, remoteTask._id);
                   

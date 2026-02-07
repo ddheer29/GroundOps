@@ -4,6 +4,7 @@ import { RealmProvider } from './database/realm';
 import { RootNavigator } from './navigation/Navigation';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { navigationRef } from './utils/NavigationUtil';
+import Toast from './utils/Toast';
 
 function App(): React.JSX.Element {
   return (
@@ -13,6 +14,7 @@ function App(): React.JSX.Element {
                 <RootNavigator />
             </NavigationContainer>
         </RealmProvider>
+        <Toast />
     </SafeAreaProvider>
   );
 }

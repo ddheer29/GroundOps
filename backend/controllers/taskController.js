@@ -13,7 +13,10 @@ const getTasks = async (req, res) => {
     // SaaS: ONLY return tasks matching User's Organization
     const totalTasks = await Task.countDocuments({ organization: req.user.organization });
     const tasks = await Task.find({ organization: req.user.organization }).skip(skip).limit(limit);
-    res.json({ tasks, totalTasks, page, size: limit });
+    
+    res.set('x-total-count', totalTasks);
+    res.set('Access-Control-Expose-Headers', 'x-total-count');
+    res.json(tasks);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

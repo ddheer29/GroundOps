@@ -35,8 +35,9 @@ const Tasks = () => {
                     limit
                 }
             });
-            setTasks(response.data?.tasks);
-            setTotalTasks(response.data?.totalTasks);
+            setTasks(response.data);
+            const count = response.headers['x-total-count'];
+            setTotalTasks(count ? parseInt(count) : response.data.length);
         } catch (e) {
             console.error(e);
         } finally {
@@ -68,7 +69,7 @@ const Tasks = () => {
             setSnackbar({ open: true, message: 'Task created successfully.', severity: 'success' });
         } catch (e) {
             console.error(e);
-            setSnackbar({ open: true, message: 'This is an error Alert.', severity: 'error' });
+            setSnackbar({ open: true, message: 'Failed to create task. Please try again.', severity: 'error' });
         }
     };
 
