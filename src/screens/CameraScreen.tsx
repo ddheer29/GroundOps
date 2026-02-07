@@ -1,19 +1,54 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Alert, Linking } from 'react-native';
 import { useRoute } from '@react-navigation/native';
+import { Camera, useCameraDevice, useCameraPermission } from 'react-native-vision-camera';
 import { useRealm, useObject } from '../database/realm';
 import { Task } from '../database/schemas';
 import { COLORS, SPACING } from '../theme/theme';
 import Realm from 'realm';
 import { goBack } from '../utils/NavigationUtil';
+import Toast from '../utils/Toast';
 
 export const CameraScreen = () => {
     const route = useRoute<any>();
     const { taskId } = route.params || {};
     const [capturing, setCapturing] = useState(false);
+    const camera = useRef<Camera>(null);
     
     const realm = useRealm();
     const task = useObject(Task, taskId);
+    
+    // Real Camera logic
+    const { hasPermission, requestPermission } = useCameraPermission();
+    const device = useCameraDevice('back');
+
+    useEffect(() => {
+        if (!hasPermission) {
+            requestPermission();
+        }
+    }, [hasPermission]);
+
+    if (!hasPermission) {
+        return (
+            <View style={styles.container}>
+                <Text style={styles.errorText}>No camera permission</Text>
+                <TouchableOpacity onPress={() => Linking.openSettings()} style={styles.backBtn}>
+                    <Text style={styles.backBtnText}>Open Settings</Text>
+                </TouchableOpacity>
+            </View>
+        );
+    }
+
+    if (!device) {
+        return (
+            <View style={styles.container}>
+                <Text style={styles.errorText}>No camera device found</Text>
+                <TouchableOpacity onPress={() => goBack()} style={styles.backBtn}>
+                    <Text style={styles.backBtnText}>Go Back</Text>
+                </TouchableOpacity>
+            </View>
+        );
+    }
 
     if (!task) {
         return (
@@ -27,22 +62,24 @@ export const CameraScreen = () => {
     }
 
     const takePicture = async () => {
-        setCapturing(true);
+        if (camera.current == null) return;
         
-        // Simulate camera processing delay
-        setTimeout(() => {
-            const mockPath = `file:///storage/emulated/0/GroundOps/IMG_${Date.now()}.jpg`;
+        try {
+            setCapturing(true);
+            const photo = await camera.current.takePhoto({
+                flash: 'auto'
+            });
+
+            const photoPath = `file://${photo.path}`;
             
             realm.write(() => {
-                // 1. Add attachment to task
-                task.attachments.push(mockPath);
+                task.attachments.push(photoPath);
                 task.updatedAt = new Date();
                 task.isSynced = false;
 
-                // 2. Add to SyncQueue
                 const payload = {
                     _id: task._id,
-                    attachment: mockPath,
+                    attachment: photoPath,
                     operation: 'ADD_ATTACHMENT'
                 };
 
@@ -56,32 +93,50 @@ export const CameraScreen = () => {
                 });
             });
 
-            setCapturing(false);
             goBack();
-        }, 1500);
+        } catch (e) {
+            console.error(e);
+            Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: 'Failed to take photo',
+            })
+        } finally {
+            setCapturing(false);
+        }
     };
 
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => goBack()} style={styles.closeBtn}>
-                     <Text style={styles.closeText}>✕</Text>
-                </TouchableOpacity>
-            </View>
+            <Camera
+                ref={camera}
+                style={StyleSheet.absoluteFill}
+                device={device}
+                isActive={true}
+                photo={true}
+            />
             
-            <View style={styles.viewfinder}>
-                <Text style={styles.instruction}>Align subject within frame</Text>
-                <View style={styles.focusFrame} />
-            </View>
-
-            <View style={styles.controls}>
-                {capturing ? (
-                    <ActivityIndicator size="large" color={COLORS.white} />
-                ) : (
-                    <TouchableOpacity style={styles.captureBtnOuter} onPress={takePicture}>
-                        <View style={styles.captureBtnInner} />
+            <View style={styles.overlay}>
+                <View style={styles.header}>
+                    <TouchableOpacity onPress={() => goBack()} style={styles.closeBtn}>
+                         <Text style={styles.closeText}>✕</Text>
                     </TouchableOpacity>
-                )}
+                </View>
+                
+                <View style={styles.viewfinder}>
+                    <Text style={styles.instruction}>Align subject within frame</Text>
+                    <View style={styles.focusFrame} />
+                </View>
+
+                <View style={styles.controls}>
+                    {capturing ? (
+                        <ActivityIndicator size="large" color={COLORS.white} />
+                    ) : (
+                        <TouchableOpacity style={styles.captureBtnOuter} onPress={takePicture}>
+                            <View style={styles.captureBtnInner} />
+                        </TouchableOpacity>
+                    )}
+                </View>
             </View>
         </View>
     );
@@ -91,6 +146,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'black',
+    },
+    overlay: {
+        flex: 1,
+        backgroundColor: 'transparent',
     },
     header: {
         paddingTop: 50,

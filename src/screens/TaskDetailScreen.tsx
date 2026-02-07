@@ -96,6 +96,7 @@ export const TaskDetailScreen = () => {
           <TextInput
              style={styles.input}
              multiline
+             placeholderTextColor={COLORS.textSecondary}
              value={noteText}
              onChangeText={setNoteText}
              onBlur={saveNotes}
