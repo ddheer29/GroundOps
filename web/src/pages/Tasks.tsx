@@ -1,10 +1,19 @@
 import { useEffect, useState } from 'react';
-import { Box, Typography, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Chip, Dialog, DialogTitle, DialogContent, TextField, DialogActions, FormControl, InputLabel, Select, MenuItem, Snackbar, Alert, CircularProgress } from '@mui/material';
+import { Box, Typography, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Chip, Dialog, DialogTitle, DialogContent, TextField, DialogActions, FormControl, InputLabel, Select, MenuItem, Snackbar, Alert, CircularProgress, Pagination } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import client from '../api/client';
 
+const limit = 10;
+
+const totalPagesCalculator = (totalTasks: number, limit: number): number => {
+    if (totalTasks === 0) return 1; // Show at least 1 page even if no tasks
+    return Math.ceil(totalTasks / limit);
+}
+
 const Tasks = () => {
     const [tasks, setTasks] = useState([]);
+    const [page, setPage] = useState(1);
+    const [totalTasks, setTotalTasks] = useState(0);
     const [open, setOpen] = useState(false);
     const [newTask, setNewTask] = useState({ title: '', location: '', description: '', priority: 'Normal' });
     const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: 'success' | 'error' | 'info' | 'warning' }>({
@@ -16,12 +25,18 @@ const Tasks = () => {
 
     useEffect(() => {
         fetchTasks();
-    }, []);
+    }, [page]);
 
     const fetchTasks = async () => {
         try {
-            const { data } = await client.get('/tasks');
-            setTasks(data);
+            const response = await client.get('/tasks', {
+                params: {
+                    page: page,
+                    limit
+                }
+            });
+            setTasks(response.data?.tasks);
+            setTotalTasks(response.data?.totalTasks);
         } catch (e) {
             console.error(e);
         } finally {
@@ -82,7 +97,7 @@ const Tasks = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {tasks.map((task: any) => (
+                        {tasks?.map((task: any) => (
                             <TableRow key={task._id}>
                                 <TableCell>{task.title}</TableCell>
                                 <TableCell>{task.location}</TableCell>
@@ -95,6 +110,9 @@ const Tasks = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+                <Pagination count={totalPagesCalculator(totalTasks, limit)} shape="rounded" onChange={(_, value) => setPage(value)} />
+            </Box>
 
             <Dialog open={open} onClose={() => setOpen(false)}>
                 <DialogTitle>Create New Task</DialogTitle>

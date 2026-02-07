@@ -37,35 +37,35 @@ export const LoginScreen = () => {
       style={styles.rootContainer}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
-      <View style={styles.logoContainer}>
-        <Image source={require('../assets/icon/appLogo.png')} style={styles.logo} />
-      </View>
-      <Text style={styles.title}>Login</Text>
-      <View style={styles.form}>
-        <TextInput 
-          style={styles.input} 
-          placeholder="Username / Email" 
-          value={username} 
-          onChangeText={setUsername}
-          autoCapitalize="none"
-        />
-        <TextInput 
-          style={styles.input} 
-          placeholder="Password" 
-          value={password} 
-          onChangeText={setPassword}
-          secureTextEntry
-        />
-        <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-        <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
-          {loading ? (
-             <ActivityIndicator color="#fff" />
-          ) : (
-             <Text style={styles.buttonText}>Login</Text>
-          )}
-        </TouchableOpacity>
-      </View>
-      </View>
+        <View style={styles.logoContainer}>
+          <Image source={require('../assets/icon/appLogo.png')} style={styles.logo} />
+        </View>
+        <Text style={styles.title}>Login</Text>
+        <View style={styles.form}>
+          <TextInput 
+            style={styles.input} 
+            placeholder="Username / Email" 
+            value={username} 
+            onChangeText={setUsername}
+            autoCapitalize="none"
+          />
+          <TextInput 
+            style={styles.input} 
+            placeholder="Password" 
+            value={password} 
+            onChangeText={setPassword}
+            secureTextEntry
+          />
+          <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+          <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
+            {loading ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={styles.buttonText}>Login</Text>
+            )}
+          </TouchableOpacity>
+        </View>
+        </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
     

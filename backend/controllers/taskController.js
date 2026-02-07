@@ -5,9 +5,15 @@ const Task = require('../models/taskModel');
 // @access  Private
 const getTasks = async (req, res) => {
   try {
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const limit = req.query.limit ? parseInt(req.query.limit) : 10;
+
+    const skip = (page - 1) * limit;
+
     // SaaS: ONLY return tasks matching User's Organization
-    const tasks = await Task.find({ organization: req.user.organization });
-    res.json(tasks);
+    const totalTasks = await Task.countDocuments({ organization: req.user.organization });
+    const tasks = await Task.find({ organization: req.user.organization }).skip(skip).limit(limit);
+    res.json({ tasks, totalTasks, page, size: limit });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
