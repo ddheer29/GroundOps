@@ -10,9 +10,9 @@ const DashboardHome = () => {
         try {
             const { data } = await client.get('/tasks');
             // Basic client-side calculation for demo
-            const total = data.length;
-            const pending = data.filter((t: any) => t.status === 'Pending').length;
-            const completed = data.filter((t: any) => t.status === 'Completed').length;
+            const total = data?.tasks?.length;
+            const pending = data?.tasks?.filter((t: any) => t.status === 'Pending').length;
+            const completed = data?.tasks?.filter((t: any) => t.status === 'Completed').length;
             setStats({ tasks: total, pending, completed });
         } catch (e) {
             console.error(e);

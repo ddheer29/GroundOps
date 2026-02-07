@@ -90,10 +90,10 @@ const Tasks = () => {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Title</TableCell>
-                            <TableCell>Location</TableCell>
-                            <TableCell>Status</TableCell>
-                            <TableCell>Priority</TableCell>
+                            <TableCell sx={{ fontWeight: 'bold' }}>Title</TableCell>
+                            <TableCell sx={{ fontWeight: 'bold' }}>Location</TableCell>
+                            <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
+                            <TableCell sx={{ fontWeight: 'bold' }}>Priority</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

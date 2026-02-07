@@ -64,9 +64,9 @@ const Employees = () => {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Username/Email</TableCell>
-                            <TableCell>Role</TableCell>
-                            <TableCell>Status</TableCell>
+                            <TableCell sx={{ fontWeight: 'bold' }}>Username/Email</TableCell>
+                            <TableCell sx={{ fontWeight: 'bold' }}>Role</TableCell>
+                            <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
