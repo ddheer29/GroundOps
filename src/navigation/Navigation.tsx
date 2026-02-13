@@ -14,6 +14,8 @@ import { CameraScreen } from '../screens/CameraScreen';
 import { COLORS } from '../theme/theme';
 import { ProfileScreen } from '../screens/ProfileScreen';
 import { ForgotPassScreen } from '../screens/ForgotPassScreen';
+import { ChatSpecificScreen } from '../screens/chat/ChatSpecificScreen';
+import { ChatScreen } from '../screens/chat/ChatScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -22,6 +24,7 @@ function AppStack() {
     return (
         <Stack.Navigator>
             <Stack.Screen name="Main" component={TabNavigator} options={{ headerShown: false }} />
+            <Stack.Screen name="ChatSpecific" component={ChatSpecificScreen} options={{ headerShown: false }} />
             <Stack.Screen name="TaskDetail" component={TaskDetailScreen} options={{ title: 'Task Details' }} />
             <Stack.Screen name="Camera" component={CameraScreen} />
             <Stack.Screen name="Profile" component={ProfileScreen} />
@@ -50,6 +53,7 @@ function TabNavigator() {
             })}
         >
             <Tab.Screen name="Home" component={HomeScreen} />
+            <Tab.Screen name="Chat" component={ChatScreen} />
             <Tab.Screen name="Settings" component={SettingsScreen} />
         </Tab.Navigator>
     );
