@@ -1,4 +1,5 @@
 import React from 'react';
+import { StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { RealmProvider } from './database/realm';
 import { RootNavigator } from './navigation/Navigation';
@@ -9,20 +10,23 @@ import Toast from './utils/Toast';
 function App(): React.JSX.Element {
   return (
     <SafeAreaProvider>
-        <RealmProvider fallback={<LoadingFallback />}>
-            <NavigationContainer ref={navigationRef}>
-                <RootNavigator />
-            </NavigationContainer>
-        </RealmProvider>
-        <Toast />
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content"
+      />
+      <RealmProvider fallback={<LoadingFallback />}>
+        <NavigationContainer ref={navigationRef}>
+          <RootNavigator />
+        </NavigationContainer>
+      </RealmProvider>
+      <Toast />
     </SafeAreaProvider>
   );
 }
 
 const LoadingFallback = () => (
-    <React.Fragment>
-        {/* Simple Splash */}
-    </React.Fragment>
+  <React.Fragment>{/* Simple Splash */}</React.Fragment>
 );
 
 export default App;

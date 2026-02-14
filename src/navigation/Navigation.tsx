@@ -21,60 +21,70 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function AppStack() {
-    return (
-        <Stack.Navigator>
-            <Stack.Screen name="Main" component={TabNavigator} options={{ headerShown: false }} />
-            <Stack.Screen name="ChatSpecific" component={ChatSpecificScreen} options={{ headerShown: false }} />
-            <Stack.Screen name="TaskDetail" component={TaskDetailScreen} options={{ title: 'Task Details' }} />
-            <Stack.Screen name="Camera" component={CameraScreen} />
-            <Stack.Screen name="Profile" component={ProfileScreen} />
-        </Stack.Navigator>
-    );
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Main"
+        component={TabNavigator}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ChatSpecific"
+        component={ChatSpecificScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="TaskDetail"
+        component={TaskDetailScreen}
+        options={{ title: 'Task Details' }}
+      />
+      <Stack.Screen name="Camera" component={CameraScreen} />
+      <Stack.Screen name="Profile" component={ProfileScreen} />
+    </Stack.Navigator>
+  );
 }
 
 function TabNavigator() {
-    return (
-        <Tab.Navigator
-            screenOptions= {({route}) => ({
-                tabBarActiveTintColor: COLORS.primary,
-                tabBarInactiveTintColor: COLORS.textSecondary,
-                tabBarIcon: ({ focused, color }) => {
-                    let iconName;
-                    if (route.name === 'Home') {
-                        iconName = focused ? 'home-variant' : 'home-variant-outline';
-                    } else if (route.name === 'Settings') {
-                        iconName = focused ? 'cog' : 'cog-outline';
-                    }
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarActiveTintColor: COLORS.primary,
+        tabBarInactiveTintColor: COLORS.textSecondary,
+        tabBarIcon: ({ focused, color }) => {
+          let iconName;
+          if (route.name === 'Home') {
+            iconName = focused ? 'home-variant' : 'home-variant-outline';
+          } else if (route.name === 'Settings') {
+            iconName = focused ? 'cog' : 'cog-outline';
+          } else if (route.name === 'Chat') {
+            iconName = focused ? 'chat' : 'chat-outline';
+          }
 
-                    return (
-                        <MaterialDesignIcons name={iconName} size={24} color={color} />
-                    )
-                }
-            })}
-        >
-            <Tab.Screen name="Home" component={HomeScreen} />
-            <Tab.Screen name="Chat" component={ChatScreen} />
-            <Tab.Screen name="Settings" component={SettingsScreen} />
-        </Tab.Navigator>
-    );
+          return (
+            <MaterialDesignIcons name={iconName} size={24} color={color} />
+          );
+        },
+      })}
+    >
+      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Chat" component={ChatScreen} />
+      <Tab.Screen name="Settings" component={SettingsScreen} />
+    </Tab.Navigator>
+  );
 }
 
 function AuthStack() {
-    return (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="ForgotPass" component={ForgotPassScreen} />
-        </Stack.Navigator>
-    );
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="ForgotPass" component={ForgotPassScreen} />
+    </Stack.Navigator>
+  );
 }
 
 export const RootNavigator = () => {
-    const users = useQuery(User);
-    const isLoggedIn = users.length > 0 && users[0].sessionActive;
+  const users = useQuery(User);
+  const isLoggedIn = users.length > 0 && users[0].sessionActive;
 
-    return (
-        <>
-            {isLoggedIn ? <AppStack /> : <AuthStack />}
-        </>
-    );
+  return <>{isLoggedIn ? <AppStack /> : <AuthStack />}</>;
 };
