@@ -1,7 +1,4 @@
-import { API_URL } from '@env';
-
-// Real API Implementation
-// const API_URL = 'http://localhost:5000/api'; // Replaced by .env
+import axiosInstance from './axios';
 
 export interface TaskDto {
   _id: string;
@@ -17,43 +14,32 @@ export interface TaskDto {
 
 export const ApiClient = {
   login: async (username: string, password: string) => {
-    const response = await fetch(`${API_URL}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-    });
-    
-    if (!response.ok) throw new Error('Login failed');
-    const data = await response.json();
+    const response = await axiosInstance.post('/auth/login', { username, password });
     
     return {
         success: true,
-        token: data.token,
-        user: { id: data._id, username: data.username },
+        token: response.data.token,
+        user: { id: response.data._id, username: response.data.username },
     };
   },
 
   fetchTasks: async (token: string): Promise<TaskDto[]> => {
-    const response = await fetch(`${API_URL}/tasks`, {
+    const response = await axiosInstance.get('/tasks', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
     });
-    if (!response.ok) throw new Error('Fetch tasks failed');
-    return await response.json();
+    return response.data;
   },
 
   syncTask: async (task: any, token: string) => {
-    const response = await fetch(`${API_URL}/tasks/sync`, {
-        method: 'POST',
+    const response = await axiosInstance.post('/tasks/sync', { operation: 'UPDATE', data: task }, {
         headers: { 
-            'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ operation: 'UPDATE', data: task })
+        }
     });
     
-    if (!response.ok) throw new Error('Sync failed');
-    return await response.json();
+    return response.data;
   },
 };
+
