@@ -152,7 +152,7 @@ const DashboardLayout: React.FC = () => {
       >
         {DrawerList}
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }} height={"100vh"} width={"100vw"}>
+      <Box component="main" sx={{ flexGrow: 1, p: 3, bgcolor: 'background.default' }} minHeight="100vh" width="100%">
         <Toolbar />
         <Outlet />
       </Box>

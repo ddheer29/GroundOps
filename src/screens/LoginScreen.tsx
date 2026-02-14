@@ -47,7 +47,6 @@ export const LoginScreen = () => {
       style={styles.rootContainer}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
-        <Text style={styles.title}>Login</Text>
         <View style={styles.logoContainer}>
           <Image source={require('../assets/icon/appLogo.png')} style={styles.logo} />
         </View>
