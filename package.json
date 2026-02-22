@@ -11,6 +11,7 @@
     "build-apk": "cd android && ./gradlew clean && ./gradlew assembleRelease"
   },
   "dependencies": {
+    "@react-native-community/datetimepicker": "^8.6.0",
     "@react-native-community/netinfo": "^11.4.1",
     "@react-native-vector-icons/feather": "^12.3.0",
     "@react-native-vector-icons/ionicons": "^12.3.0",
@@ -26,8 +27,10 @@
     "axios": "^1.13.5",
     "react": "19.2.0",
     "react-native": "0.83.1",
+    "react-native-calendars": "^1.1314.0",
     "react-native-gesture-handler": "^2.30.0",
     "react-native-gifted-chat": "^3.3.2",
+    "react-native-image-picker": "^8.2.1",
     "react-native-keyboard-controller": "^1.20.7",
     "react-native-pager-view": "^8.0.0",
     "react-native-reanimated": "^4.2.1",

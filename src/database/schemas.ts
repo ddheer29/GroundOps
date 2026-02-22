@@ -33,6 +33,9 @@ export class Task extends Realm.Object<Task> {
 export class User extends Realm.Object<User> {
   _id!: BSON.ObjectId;
   username!: string;
+  name?: string;
+  dob?: string;
+  profilePhoto?: string;
   token!: string;
   sessionActive!: boolean;
 
@@ -41,6 +44,9 @@ export class User extends Realm.Object<User> {
     properties: {
       _id: { type: 'objectId', default: () => new BSON.ObjectId() },
       username: 'string',
+      name: 'string?',
+      dob: 'string?',
+      profilePhoto: 'string?',
       token: 'string',
       sessionActive: { type: 'bool', default: true },
     },

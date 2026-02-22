@@ -13,9 +13,11 @@ import { SettingsScreen } from '../screens/SettingsScreen';
 import { CameraScreen } from '../screens/CameraScreen';
 import { COLORS } from '../theme/theme';
 import { ProfileScreen } from '../screens/ProfileScreen';
+import { EditProfileScreen } from '../screens/EditProfileScreen';
 import { ForgotPassScreen } from '../screens/ForgotPassScreen';
 import { ChatSpecificScreen } from '../screens/chat/ChatSpecificScreen';
 import { ChatScreen } from '../screens/chat/ChatScreen';
+import ScheduleScreen from '../screens/ScheduleScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -40,6 +42,11 @@ function AppStack() {
       />
       <Stack.Screen name="Camera" component={CameraScreen} />
       <Stack.Screen name="Profile" component={ProfileScreen} />
+      <Stack.Screen
+        name="EditProfile"
+        component={EditProfileScreen}
+        options={{ title: 'Edit Profile' }}
+      />
     </Stack.Navigator>
   );
 }
@@ -58,6 +65,8 @@ function TabNavigator() {
             iconName = focused ? 'cog' : 'cog-outline';
           } else if (route.name === 'Chat') {
             iconName = focused ? 'chat' : 'chat-outline';
+          } else if (route.name === 'Schedule') {
+            iconName = focused ? 'calendar' : 'calendar-outline';
           }
 
           return (
@@ -68,6 +77,7 @@ function TabNavigator() {
     >
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Chat" component={ChatScreen} />
+      <Tab.Screen name="Schedule" component={ScheduleScreen} />
       <Tab.Screen name="Settings" component={SettingsScreen} />
     </Tab.Navigator>
   );

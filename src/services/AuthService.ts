@@ -24,6 +24,9 @@ export class AuthService {
         this.realm.create('User', {
             _id: new Realm.BSON.ObjectId(),
             username: response.user.username,
+            name: response.user.name,
+            dob: response.user.dob,
+            profilePhoto: response.user.profilePhoto,
             token: response.token,
             sessionActive: true
         });

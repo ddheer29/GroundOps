@@ -19,7 +19,13 @@ export const ApiClient = {
     return {
         success: true,
         token: response.data.token,
-        user: { id: response.data._id, username: response.data.username },
+        user: { 
+            id: response.data._id, 
+            username: response.data.username,
+            name: response.data.name,
+            dob: response.data.dob,
+            profilePhoto: response.data.profilePhoto,
+        },
     };
   },
 
@@ -39,6 +45,15 @@ export const ApiClient = {
         }
     });
     
+    return response.data;
+  },
+
+  updateProfile: async (data: { name: string, dob: string, profilePhoto?: string }, token: string) => {
+    const response = await axiosInstance.put('/users/profile', data, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
     return response.data;
   },
 };
