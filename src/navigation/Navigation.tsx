@@ -17,7 +17,7 @@ import { EditProfileScreen } from '../screens/EditProfileScreen';
 import { ForgotPassScreen } from '../screens/ForgotPassScreen';
 import { ChatSpecificScreen } from '../screens/chat/ChatSpecificScreen';
 import { ChatScreen } from '../screens/chat/ChatScreen';
-import ScheduleScreen from '../screens/ScheduleScreen';
+import { ScheduleScreen } from '../screens/ScheduleScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -92,9 +92,19 @@ function AuthStack() {
   );
 }
 
+import { setAuthToken } from '../api/axios';
+
 export const RootNavigator = () => {
   const users = useQuery(User);
   const isLoggedIn = users.length > 0 && users[0].sessionActive;
+
+  React.useEffect(() => {
+    if (isLoggedIn && users[0].token) {
+      setAuthToken(users[0].token);
+    } else {
+      setAuthToken(null);
+    }
+  }, [isLoggedIn, users]);
 
   return <>{isLoggedIn ? <AppStack /> : <AuthStack />}</>;
 };
