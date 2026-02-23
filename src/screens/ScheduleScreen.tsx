@@ -179,10 +179,10 @@ export const ScheduleScreen = () => {
       if (
         isEditing &&
         selectedEvent &&
-        selectedEvent.id &&
-        selectedEvent.start
+        selectedEvent?.id &&
+        selectedEvent?.start
       ) {
-        const updatedEvt = await ApiClient.updateEvent(selectedEvent.id, {
+        const updatedEvt = await ApiClient.updateEvent(selectedEvent?.id, {
           title: newEventTitle || 'New Event',
           description: newEventDescription,
         });
@@ -193,22 +193,22 @@ export const ScheduleScreen = () => {
         setIsEditing(false);
         setSelectedEvent(null);
 
-        const eventDate = selectedEvent.start.split(' ')[0];
+        const eventDate = selectedEvent?.start?.split(' ')[0];
 
         setEventsByDate(prevEventsByDate => {
           const updatedEventsByDate = { ...prevEventsByDate };
           const filtered = filter(
             updatedEventsByDate[eventDate] || [],
-            e => e.id !== selectedEvent.id,
+            e => e?.id !== selectedEvent?.id,
           );
 
           const calendarEvt: TimelineEventProps = {
-            id: updatedEvt._id,
-            start: formatTimeForCalendar(updatedEvt.start),
-            end: formatTimeForCalendar(updatedEvt.end),
-            title: updatedEvt.title,
-            summary: updatedEvt.description,
-            color: updatedEvt.color || CalendarUtils.getRandomPastelColor(),
+            id: updatedEvt?._id,
+            start: formatTimeForCalendar(updatedEvt?.start),
+            end: formatTimeForCalendar(updatedEvt?.end),
+            title: updatedEvt?.title,
+            summary: updatedEvt?.description,
+            color: updatedEvt?.color || CalendarUtils.getRandomPastelColor(),
           };
 
           updatedEventsByDate[eventDate] = [...filtered, calendarEvt];
@@ -247,16 +247,16 @@ export const ScheduleScreen = () => {
 
           const filtered = filter(
             updatedEventsByDate[selectedTimeObj.date] || [],
-            e => e.id !== 'draft',
+            e => e?.id !== 'draft',
           );
 
           const calendarEvt: TimelineEventProps = {
-            id: newEvt._id,
-            start: formatTimeForCalendar(newEvt.start),
-            end: formatTimeForCalendar(newEvt.end),
-            title: newEvt.title,
-            summary: newEvt.description,
-            color: newEvt.color || 'lightblue',
+            id: newEvt?._id,
+            start: formatTimeForCalendar(newEvt?.start),
+            end: formatTimeForCalendar(newEvt?.end),
+            title: newEvt?.title,
+            summary: newEvt?.description,
+            color: newEvt?.color || 'lightblue',
           };
 
           updatedEventsByDate[selectedTimeObj.date] = [
@@ -276,16 +276,16 @@ export const ScheduleScreen = () => {
   };
 
   const handleDeleteEvent = async (event: TimelineEventProps) => {
-    if (!user?.token || !event.id) return;
+    if (!user?.token || !event?.id) return;
     try {
-      await ApiClient.deleteEvent(event.id);
-      const eventDate = event.start.split(' ')[0];
+      await ApiClient.deleteEvent(event?.id);
+      const eventDate = event?.start?.split(' ')[0];
       setEventsByDate(prevEventsByDate => {
         const updatedEventsByDate = { ...prevEventsByDate };
         if (updatedEventsByDate[eventDate]) {
           updatedEventsByDate[eventDate] = filter(
             updatedEventsByDate[eventDate],
-            e => e.id !== event.id,
+            e => e?.id !== event?.id,
           );
         }
         return updatedEventsByDate;
@@ -297,15 +297,15 @@ export const ScheduleScreen = () => {
   };
 
   const handleEventPress = (event: TimelineEventProps) => {
-    Alert.alert('Event Options', event.title || 'Event', [
+    Alert.alert('Event Options', event?.title ?? 'Event', [
       {
         text: 'Edit',
         style: 'default',
         onPress: () => {
           setIsEditing(true);
           setSelectedEvent(event);
-          setNewEventTitle(event.title || '');
-          setNewEventDescription(event.summary || '');
+          setNewEventTitle(event?.title || '');
+          setNewEventDescription(event?.summary || '');
           setIsModalVisible(true);
         },
       },
