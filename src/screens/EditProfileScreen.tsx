@@ -12,9 +12,7 @@ import {
   Image,
   ActivityIndicator,
 } from 'react-native';
-import { useRealm } from '../database/realm';
-import { User } from '../database/schemas';
-import { COLORS, SPACING, FONT_SIZE } from '../theme/theme';
+
 import { useNavigation, useRoute } from '@react-navigation/native';
 import {
   launchImageLibrary,
@@ -23,6 +21,10 @@ import {
 } from 'react-native-image-picker';
 import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
+
+import { useRealm } from '../database/realm';
+import { User } from '../database/schemas';
+import { COLORS, SPACING, FONT_SIZE } from '../theme/theme';
 import { ApiClient } from '../api/client';
 
 export const EditProfileScreen = () => {

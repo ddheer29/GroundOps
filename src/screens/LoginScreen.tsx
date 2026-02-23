@@ -1,9 +1,23 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, Alert, Image, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  ActivityIndicator,
+  Image,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Platform,
+} from 'react-native';
+
+import { useNetInfo } from '@react-native-community/netinfo';
+
 import { useRealm } from '../database/realm';
 import { AuthService } from '../services/AuthService';
 import { COLORS, SPACING, FONT_SIZE } from '../theme/theme';
-import { useNetInfo } from '@react-native-community/netinfo';
 import Toast from '../utils/Toast';
 import { navigate } from '../utils/NavigationUtil';
 
@@ -11,30 +25,30 @@ export const LoginScreen = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  
+
   const realm = useRealm();
   const authService = new AuthService(realm);
   const netInfo = useNetInfo();
-  
+
   const handleLogin = async () => {
     if (!netInfo.isConnected) {
-        Toast.show({
-          type: 'error',
-          text1: 'Offline',
-          text2: 'You need internet connection to login for the first time.'
-        });
-        return;
+      Toast.show({
+        type: 'error',
+        text1: 'Offline',
+        text2: 'You need internet connection to login for the first time.',
+      });
+      return;
     }
-    
+
     setLoading(true);
     try {
       await authService.login(username, password);
     } catch (error) {
-      console.log("🚀 -> handleLogin -> error:", error)
+      console.log('🚀 -> handleLogin -> error:', error);
       Toast.show({
         type: 'error',
         text1: 'Login Failed',
-        text2: 'Invalid credentials or network error'
+        text2: 'Invalid credentials or network error',
       });
     } finally {
       setLoading(false);
@@ -44,42 +58,54 @@ export const LoginScreen = () => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.rootContainer}>
+      style={styles.rootContainer}
+    >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
-        <View style={styles.logoContainer}>
-          <Image source={require('../assets/icon/appLogo.png')} style={styles.logo} />
-        </View>
-        <View style={styles.form}>
-          <TextInput 
-            style={styles.input} 
-            placeholder="Username / Email" 
-            placeholderTextColor={COLORS.textSecondary}
-            value={username} 
-            onChangeText={setUsername}
-            autoCapitalize="none"
-          />
-          <TextInput 
-            style={styles.input} 
-            placeholder="Password" 
-            placeholderTextColor={COLORS.textSecondary}
-            value={password} 
-            onChangeText={setPassword}
-            // secureTextEntry
-          />
-          <Text style={styles.forgotPasswordText} onPress={() => navigate('ForgotPass')}>Forgot Password?</Text>
-          <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
-            {loading ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <Text style={styles.buttonText}>Login</Text>
-            )}
-          </TouchableOpacity>
-        </View>
+          <View style={styles.logoContainer}>
+            <Image
+              source={require('../assets/icon/appLogo.png')}
+              style={styles.logo}
+            />
+          </View>
+          <View style={styles.form}>
+            <TextInput
+              style={styles.input}
+              placeholder="Username / Email"
+              placeholderTextColor={COLORS.textSecondary}
+              value={username}
+              onChangeText={setUsername}
+              autoCapitalize="none"
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              placeholderTextColor={COLORS.textSecondary}
+              value={password}
+              onChangeText={setPassword}
+              // secureTextEntry
+            />
+            <Text
+              style={styles.forgotPasswordText}
+              onPress={() => navigate('ForgotPass')}
+            >
+              Forgot Password?
+            </Text>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={handleLogin}
+              disabled={loading}
+            >
+              {loading ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <Text style={styles.buttonText}>Login</Text>
+              )}
+            </TouchableOpacity>
+          </View>
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
-    
   );
 };
 

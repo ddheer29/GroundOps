@@ -1,17 +1,23 @@
-import React from 'react'
+import React from 'react';
+import { StyleSheet } from 'react-native';
 
-import RawToast, {ToastConfig, ToastProps} from 'react-native-toast-message'
-import { CustomBaseToast } from './CustomBaseToast'
-import { VectorIcon } from '../icons'
-import { ShowOptions } from '../types'
+import RawToast, { ToastConfig, ToastProps } from 'react-native-toast-message';
+import { CustomBaseToast } from './CustomBaseToast';
+import { VectorIcon } from '../icons';
+import { ShowOptions } from '../types';
 
+const styles = StyleSheet.create({
+  successBorder: { borderLeftColor: '#10b981' },
+  errorBorder: { borderLeftColor: '#ef4444' },
+  infoBorder: { borderLeftColor: '#3b82f6' },
+});
 
 const toastConfig: ToastConfig = {
-  success: ({...rest}) => {
+  success: ({ ...rest }) => {
     return (
       <CustomBaseToast
         onTrailingIconPress={rest?.hide}
-        style={{borderLeftColor: '#10b981'}}
+        style={styles.successBorder}
         leadingIcon={
           <VectorIcon
             name={'checkmark-circle-outline'}
@@ -24,13 +30,13 @@ const toastConfig: ToastConfig = {
         {...rest}
         {...rest?.props?.successProps}
       />
-    )
+    );
   },
-  error: ({...rest}) => {
+  error: ({ ...rest }) => {
     return (
       <CustomBaseToast
         onTrailingIconPress={rest?.hide}
-        style={{borderLeftColor: '#ef4444'}}
+        style={styles.errorBorder}
         leadingIcon={
           <VectorIcon
             name={'close-circle-outline'}
@@ -43,13 +49,13 @@ const toastConfig: ToastConfig = {
         {...rest}
         {...rest?.props?.errorProps}
       />
-    )
+    );
   },
-  info: ({...rest}) => {
+  info: ({ ...rest }) => {
     return (
       <CustomBaseToast
         onTrailingIconPress={rest?.hide}
-        style={{borderLeftColor: '#3b82f6'}}
+        style={styles.infoBorder}
         leadingIcon={
           <VectorIcon
             name={'information-circle-outline'}
@@ -62,20 +68,20 @@ const toastConfig: ToastConfig = {
         {...rest}
         {...rest?.props?.infoProps}
       />
-    )
+    );
   },
-}
+};
 
-const Toast = ({...rest}: ToastProps) => {
-  return <RawToast config={toastConfig} {...rest} />
-}
+const Toast = ({ ...rest }: ToastProps) => {
+  return <RawToast config={toastConfig} {...rest} />;
+};
 
 Toast.show = (props: ShowOptions) => {
-  RawToast.show(props)
-}
+  RawToast.show(props);
+};
 
 Toast.hide = () => {
-  RawToast.hide()
-}
+  RawToast.hide();
+};
 
-export default Toast
+export default Toast;

@@ -1,5 +1,13 @@
 import React from 'react';
-import { View, Text, StyleSheet, Button, Alert, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Button,
+  Alert,
+  TouchableOpacity,
+} from 'react-native';
+
 import { useRealm, useQuery } from '../database/realm';
 import { User, SyncQueue } from '../database/schemas';
 import { AuthService } from '../services/AuthService';
@@ -31,27 +39,30 @@ export const SettingsScreen = () => {
   };
 
   const handleForceSync = async () => {
-      await syncService.syncPendingChanges();
-      await syncService.pullLatestData();
-      Alert.alert('Sync', 'Sync process triggered.');
+    await syncService.syncPendingChanges();
+    await syncService.pullLatestData();
+    Alert.alert('Sync', 'Sync process triggered.');
   };
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.section} onPress={() => navigate('Profile')}>
-          <Text style={styles.header}>Account</Text>
-          <Text style={styles.info}>Logged in as: {user?.username}</Text>
+      <TouchableOpacity
+        style={styles.section}
+        onPress={() => navigate('Profile')}
+      >
+        <Text style={styles.header}>Account</Text>
+        <Text style={styles.info}>Logged in as: {user?.username}</Text>
       </TouchableOpacity>
 
       <View style={styles.section}>
-          <Text style={styles.header}>Sync</Text>
-          <Text style={styles.info}>Pending changes: {pendingSyncs}</Text>
-          <Button title="Force Sync" onPress={handleForceSync} />
+        <Text style={styles.header}>Sync</Text>
+        <Text style={styles.info}>Pending changes: {pendingSyncs}</Text>
+        <Button title="Force Sync" onPress={handleForceSync} />
       </View>
-      
+
       <View style={styles.section}>
-          <Text style={styles.header}>App Info</Text>
-          <Text style={styles.info}>Version: 0.0.1</Text>
+        <Text style={styles.header}>App Info</Text>
+        <Text style={styles.info}>Version: 0.0.1</Text>
       </View>
       <Button title="Logout" onPress={handleLogout} color={COLORS.danger} />
     </View>
@@ -76,7 +87,7 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.s,
   },
   info: {
-      marginBottom: SPACING.m,
-      fontSize: 16,
-  }
+    marginBottom: SPACING.m,
+    fontSize: 16,
+  },
 });

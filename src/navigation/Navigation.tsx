@@ -1,11 +1,11 @@
 import React from 'react';
+
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons';
 
 import { useQuery } from '../database/realm';
 import { User } from '../database/schemas';
-
 import { LoginScreen } from '../screens/LoginScreen';
 import { HomeScreen } from '../screens/HomeScreen';
 import { TaskDetailScreen } from '../screens/TaskDetailScreen';
@@ -15,12 +15,31 @@ import { COLORS } from '../theme/theme';
 import { ProfileScreen } from '../screens/ProfileScreen';
 import { EditProfileScreen } from '../screens/EditProfileScreen';
 import { ForgotPassScreen } from '../screens/ForgotPassScreen';
-import { ChatSpecificScreen } from '../screens/chat/ChatSpecificScreen';
-import { ChatScreen } from '../screens/chat/ChatScreen';
 import { ScheduleScreen } from '../screens/ScheduleScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+
+const tabBarIcon = ({
+  focused,
+  color,
+  route,
+}: {
+  focused: boolean;
+  color: string;
+  route: any;
+}) => {
+  let iconName: string = '';
+  if (route.name === 'Home') {
+    iconName = focused ? 'home-variant' : 'home-variant-outline';
+  } else if (route.name === 'Settings') {
+    iconName = focused ? 'cog' : 'cog-outline';
+  } else if (route.name === 'Schedule') {
+    iconName = focused ? 'calendar' : 'calendar-outline';
+  }
+
+  return <MaterialDesignIcons name={iconName as any} size={24} color={color} />;
+};
 
 function AppStack() {
   return (
@@ -28,11 +47,6 @@ function AppStack() {
       <Stack.Screen
         name="Main"
         component={TabNavigator}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="ChatSpecific"
-        component={ChatSpecificScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
@@ -57,26 +71,11 @@ function TabNavigator() {
       screenOptions={({ route }) => ({
         tabBarActiveTintColor: COLORS.primary,
         tabBarInactiveTintColor: COLORS.textSecondary,
-        tabBarIcon: ({ focused, color }) => {
-          let iconName;
-          if (route.name === 'Home') {
-            iconName = focused ? 'home-variant' : 'home-variant-outline';
-          } else if (route.name === 'Settings') {
-            iconName = focused ? 'cog' : 'cog-outline';
-          } else if (route.name === 'Chat') {
-            iconName = focused ? 'chat' : 'chat-outline';
-          } else if (route.name === 'Schedule') {
-            iconName = focused ? 'calendar' : 'calendar-outline';
-          }
-
-          return (
-            <MaterialDesignIcons name={iconName} size={24} color={color} />
-          );
-        },
+        tabBarIcon: ({ focused, color }) =>
+          tabBarIcon({ focused, color, route }),
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Chat" component={ChatScreen} />
       <Tab.Screen name="Schedule" component={ScheduleScreen} />
       <Tab.Screen name="Settings" component={SettingsScreen} />
     </Tab.Navigator>

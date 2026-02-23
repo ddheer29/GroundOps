@@ -8,11 +8,11 @@ interface CustomBaseToastProps extends BaseToastProps {
   leadingIcon?: React.ReactNode;
 }
 
-export const CustomBaseToast = ({ 
-  onTrailingIconPress, 
-  style, 
+export const CustomBaseToast = ({
+  onTrailingIconPress,
+  style,
   leadingIcon,
-  ...rest 
+  ...rest
 }: CustomBaseToastProps) => {
   return (
     <BaseToast
